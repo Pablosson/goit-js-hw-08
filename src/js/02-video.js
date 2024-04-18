@@ -14,6 +14,8 @@ player.on(
 player.on('play', () => {
   const currentTime = localStorage.getItem('videoplayer-current-time');
   if (currentTime) {
-    player.setCurrentTime(parseFloat(currentTime));
+    player.setCurrentTime(parseFloat(currentTime)).then(() => {
+      player.play();
+    });
   }
 });
