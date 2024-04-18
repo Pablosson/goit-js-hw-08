@@ -1,32 +1,29 @@
-import VimeoPlayer from '@vimeo/player';
+import Player from '@vimeo/player';
 import throttle from 'lodash.throttle';
 
-const VIDEOPLAYER_CURRENT_TIME = 'videoplayer-current-time';
+const CURRENT_TIME_KEY = 'videoplayer-current-time';
 
-const refs = {
-  iframe: document.querySelector('#vimeo-player'),
+const iframe = document.querySelector('iframe');
+const player = new Player(iframe, {
+  loop: true,
+  fullscreen: true,
+  quality: '1080p',
+});
+
+const getCurrentTime = function (currentTime) {
+  const seconds = currentTime.seconds;
+  localStorage.setItem(CURRENT_TIME_KEY, JSON.stringify(seconds));
 };
 
-const player = createPlayer(refs.iframe);
-setStartPlaybackTime(readPlaybackCurrentTime());
-player.on('timeupdate', throttle(onPlayerTimeUpdate, 1000));
+player.on('timeupdate', throttle(getCurrentTime, 1000));
 
-function createPlayer(element, opts = {}) {
-  return new VimeoPlayer(element, opts);
-}
+player.setCurrentTime(JSON.parse(localStorage.getItem(CURRENT_TIME_KEY)) || 0);
 
-function createPlaybackCurrentTime(newCurrentPlaybackTime) {
-  localStorage.setItem(VIDEOPLAYER_CURRENT_TIME, newCurrentPlaybackTime);
-}
-
-function readPlaybackCurrentTime() {
-  return localStorage.getItem(VIDEOPLAYER_CURRENT_TIME) || 0;
-}
-
-function setStartPlaybackTime(newStartPlaybackTime) {
-  player.setCurrentTime(newStartPlaybackTime);
-}
-
-function onPlayerTimeUpdate({ seconds }) {
-  createPlaybackCurrentTime(seconds);
-}
+player
+  .setColor('#d8e0ff')
+  .then(function (color) {
+    console.log('The new color value: #D8E0FF');
+  })
+  .catch(function (error) {
+    console.log('An error occurred while setting the color');
+  });
