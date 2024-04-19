@@ -26,14 +26,14 @@ window.addEventListener('load', updateFormState);
 
 form.addEventListener('submit', event => {
   event.preventDefault();
-  if (emailInput.value || messageInput.value) {
+  if (emailInput.value && messageInput.value) {
     console.log('Form submitted:', {
       email: emailInput.value,
       message: messageInput.value,
     });
-  }
-  if (emailInput.value && messageInput.value) {
     form.reset();
     localStorage.removeItem(STORAGE_KEY);
+  } else {
+    alert('Wypełnij wszystkie pola!');
   }
 });
