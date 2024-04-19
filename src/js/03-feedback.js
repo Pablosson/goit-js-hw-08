@@ -26,10 +26,12 @@ window.addEventListener('load', updateFormState);
 
 form.addEventListener('submit', event => {
   event.preventDefault();
-  localStorage.removeItem(STORAGE_KEY);
+  if (emailInput.value || messageInput.value) {
+    console.log('Form submitted:', {
+      email: emailInput.value,
+      message: messageInput.value,
+    });
+  }
   form.reset();
-  console.log('Form submitted:', {
-    email: emailInput.value,
-    message: messageInput.value,
-  });
+  localStorage.removeItem(STORAGE_KEY);
 });
